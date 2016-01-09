@@ -13,6 +13,8 @@ INCLUDE Irvine32.inc
 .data
 
 my_name BYTE "Hello My Name Is Julian Weisbord",0 
+prompt1 BYTE "Enter a number: ",0
+prompt2 BYTE "Enter a second number: ",0
 num1 DWORD ?
 num2 DWORD ?
 message BYTE "End of Program, goodbye...",0
@@ -27,6 +29,24 @@ main PROC
 
 mov edx, OFFSET my_name
 call WriteString
+call CrLf
+
+;Get num1
+
+mov edx, OFFSET prompt1
+call WriteString
+call ReadInt
+mov num1, eax
+;call WriteDec
+call CrLf
+
+;Get num2
+
+mov edx, OFFSET prompt2
+call WriteString
+call ReadInt
+mov num2, eax
+;call WriteDec
 call CrLf
 
 	exit	; exit to operating system
