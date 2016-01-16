@@ -15,9 +15,13 @@ num_1 DWORD ?; 32 bit unsigned int
 num_2 DWORD ?
 my_name BYTE "Name: Julian Weisbord ",0
 my_title BYTE "Title: project01.asm", 0
-bye BYTE "goodbye", 0
+bye BYTE "Impressed? Bye!", 0
 prompt_1 BYTE "Enter first number:",0
 prompt_2 BYTE "Enter second number:",0
+description BYTE "Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0
+ecDescription BYTE "**EC: Program varifies second number less than first. Program also prompts the user to quit or repeat program.",0
+val_error BYTE "The second number must be less than the first.", 0
+quit BYTE "Would you like to keep playing?(y/n)", 0
 
 sum DWORD ?
 difference DWORD ?
@@ -33,14 +37,20 @@ remainder_string BYTE "Remainder: ",0
 .code
 main PROC
 
-;print name and title
+;print name, title, and extra credit description
 mov edx, offset my_name
 call WriteString
 mov edx, offset my_title
 call WriteString
 call CrLf
+mov edx, offset ecDescription
+call WriteString
+call crlf
 
 ;Enter numbers one and two
+mov edx, offset description
+call WriteString
+call crlf
 mov edx, offset prompt_1
 call WriteString
 call CrLf
@@ -57,6 +67,10 @@ call ReadInt; in eax
 call WriteDec
 call CrLf
 mov num_2, eax
+
+	;compare numbers
+cmp num_1, eax
+jle valError
 
 ;sum of numbers
 
@@ -106,6 +120,10 @@ mov edx, offset bye
 call WriteString
 call crlf
 
+valError:
+	mov edx, offset val_error
+	call WriteString
+	call crlf
 
 exit
 main ENDP
