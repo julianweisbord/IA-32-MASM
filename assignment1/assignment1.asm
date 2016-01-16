@@ -13,11 +13,11 @@ INCLUDE Irvine32.inc
 
 num_1 DWORD ?; 32 bit unsigned int
 num_2 DWORD ?
-name BYTE "Julian Weisbord",0
-title BYTE "project01.asm", 0
+my_name BYTE "Name: Julian Weisbord ",0
+my_title BYTE "Title: project01.asm", 0
 bye BYTE "goodbye", 0
-prompt_1 "Enter first number",0
-prompt_2 "Enter second number",0
+prompt_1 BYTE "Enter first number",0
+prompt_2 BYTE "Enter second number",0
 
 sum DWORD ?
 difference DWORD ?
@@ -26,7 +26,7 @@ quotient DWORD ?
 remainder DWORD ?
 
 sum_string BYTE "Sum: ",0
-difference_string "Difference: ",0
+difference_string BYTE "Difference: ",0
 product_string BYTE "Product: ",0
 quotient_string BYTE "Quotient: ",0
 remainder_string BYTE "Remainder: ",0
@@ -34,9 +34,9 @@ remainder_string BYTE "Remainder: ",0
 main PROC
 
 ;print name and title
-mov edx, offset name
+mov edx, offset my_name
 call WriteString
-mov edx, offset title
+mov edx, offset my_title
 call WriteString
 call CrLf
 
@@ -67,7 +67,8 @@ call CrLf
 
 ;difference of numbers
 ;What if second is smaller than first?
-sub num_2, num_1
+mov eax, num_2
+sub eax, num_1
 mov edx, offset difference_string
 call WriteString
 call WriteInt
@@ -76,7 +77,7 @@ call CrLf
 ;product of numbers
 mov eax, num_1
 mul num_2
-mov edx, product_string
+mov edx, offset product_string
 call WriteString
 call WriteInt
 call CrLf
