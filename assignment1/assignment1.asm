@@ -8,50 +8,97 @@ TITLE assignment 1     (assignment1.asm)
 
 INCLUDE Irvine32.inc
 
-; (insert constant definitions here)
 
 .data
 
-my_name BYTE "Hello My Name Is Julian Weisbord",0 
-prompt1 BYTE "Enter a number: ",0
-prompt2 BYTE "Enter a second number: ",0
-num1 DWORD ?
-num2 DWORD ?
-message BYTE "End of Program, goodbye...",0
+num_1 DWORD ?; 32 bit unsigned int
+num_2 DWORD ?
+name BYTE "Julian Weisbord",0
+title BYTE "project01.asm", 0
+bye BYTE "goodbye", 0
+prompt_1 "Enter first number",0
+prompt_2 "Enter second number",0
 
-; (insert variable definitions here)
+sum DWORD ?
+difference DWORD ?
+product DWORD ?
+quotient DWORD ?
+remainder DWORD ?
 
-
+sum_string BYTE "Sum: ",0
+difference_string "Difference: ",0
+product_string BYTE "Product: ",0
+quotient_string BYTE "Quotient: ",0
+remainder_string BYTE "Remainder: ",0
 .code
 main PROC
 
-;Introduction
-
-mov edx, OFFSET my_name
+;print name and title
+mov edx, offset name
+call WriteString
+mov edx, offset title
 call WriteString
 call CrLf
 
-;Get num1
-
-mov edx, OFFSET prompt1
+;Enter numbers one and two
+mov edx, offset prompt_1
 call WriteString
+call CrLf
 call ReadInt
-mov num1, eax
-;call WriteDec
+call WriteDec
 call CrLf
+mov ebx, eax ;can't have 2 numbers in eax
+mov num_1, ebx; store in num_1
 
-;Get num2
-
-mov edx, OFFSET prompt2
+mov edx, offset prompt_2
 call WriteString
-call ReadInt
-mov num2, eax
-;call WriteDec
+call CrLf
+call ReadInt; in eax
+call WriteDec
+call CrLf
+mov num_2, eax
+
+;sum of numbers
+
+add eax, ebx
+mov edx, offset sum_string
+call writeDec
 call CrLf
 
-	exit	; exit to operating system
+;difference of numbers
+;What if second is smaller than first?
+sub num_2, num_1
+mov edx, offset difference_string
+call WriteString
+call WriteInt
+call CrLf
+
+;product of numbers
+mov eax, num_1
+mul num_2
+mov edx, product_string
+call WriteString
+call WriteInt
+call CrLf
+
+;Quotient of numbers, num_1 already in eax
+sub edx, edx
+div num_2
+mov remainder,edx
+mov edx, offset quotient_string
+call WriteString
+call WriteDec
+call crlf
+
+;Remainder
+mov eax, remainder
+mov edx, offset remainder_string
+call WriteString
+call WriteInt
+call crlf
+
+
+
+exit
 main ENDP
-
-; (insert additional procedures here)
-
 END main
