@@ -16,8 +16,8 @@ num_2 DWORD ?
 my_name BYTE "Name: Julian Weisbord ",0
 my_title BYTE "Title: project01.asm", 0
 bye BYTE "goodbye", 0
-prompt_1 BYTE "Enter first number",0
-prompt_2 BYTE "Enter second number",0
+prompt_1 BYTE "Enter first number:",0
+prompt_2 BYTE "Enter second number:",0
 
 sum DWORD ?
 difference DWORD ?
@@ -62,7 +62,8 @@ mov num_2, eax
 
 add eax, ebx
 mov edx, offset sum_string
-call writeDec
+call WriteString
+call WriteDec
 call CrLf
 
 ;difference of numbers
@@ -82,7 +83,8 @@ call WriteString
 call WriteInt
 call CrLf
 
-;Quotient of numbers, num_1 already in eax
+;Quotient of numbers
+mov eax, num_1
 sub edx, edx
 div num_2
 mov remainder,edx
@@ -98,6 +100,11 @@ call WriteString
 call WriteInt
 call crlf
 
+;good bye
+
+mov edx, offset bye
+call WriteString
+call crlf
 
 
 exit
