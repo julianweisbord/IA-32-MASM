@@ -21,7 +21,8 @@ prompt_2 BYTE "Enter second number:",0
 description BYTE "Enter 2 numbers, and I'll show you the sum, difference, product, quotient, and remainder.",0
 ecDescription BYTE "**EC: Program varifies second number less than first. Program also prompts the user to quit or repeat program.",0
 val_error BYTE "The second number must be less than the first.", 0
-quit BYTE "Would you like to keep playing?(y/n)", 0
+quit_string BYTE "Would you like to keep playing?(1 =yes/ 0 = no)", 0
+yes DWORD 1 ; check if user wants to repeat
 
 sum DWORD ?
 difference DWORD ?
@@ -46,84 +47,99 @@ call CrLf
 mov edx, offset ecDescription
 call WriteString
 call crlf
-
-;Enter numbers one and two
-mov edx, offset description
-call WriteString
-call crlf
-mov edx, offset prompt_1
-call WriteString
-call CrLf
-call ReadInt
-call WriteDec
-call CrLf
-mov ebx, eax ;can't have 2 numbers in eax
-mov num_1, ebx; store in num_1
-
-mov edx, offset prompt_2
-call WriteString
-call CrLf
-call ReadInt; in eax
-call WriteDec
-call CrLf
-mov num_2, eax
-
-	;compare numbers
-cmp num_1, eax
-jle valError
-
-;sum of numbers
-
-add eax, ebx
-mov edx, offset sum_string
-call WriteString
-call WriteDec
-call CrLf
-
-;difference of numbers
-;What if second is smaller than first?
-mov eax, num_2
-sub eax, num_1
-mov edx, offset difference_string
-call WriteString
-call WriteInt
-call CrLf
-
-;product of numbers
-mov eax, num_1
-mul num_2
-mov edx, offset product_string
-call WriteString
-call WriteInt
-call CrLf
-
-;Quotient of numbers
-mov eax, num_1
-sub edx, edx
-div num_2
-mov remainder,edx
-mov edx, offset quotient_string
-call WriteString
-call WriteDec
 call crlf
 
-;Remainder
-mov eax, remainder
-mov edx, offset remainder_string
-call WriteString
-call WriteInt
-call crlf
-
-;good bye
-
-mov edx, offset bye
-call WriteString
-call crlf
-
-valError:
-	mov edx, offset val_error
+whileLoop:
+	;Enter numbers one and two
+	mov edx, offset description
 	call WriteString
 	call crlf
+	mov edx, offset prompt_1
+	call WriteString
+	call CrLf
+	call ReadInt
+	call WriteDec
+	call CrLf
+	mov ebx, eax ;can't have 2 numbers in eax
+	mov num_1, ebx; store in num_1
+
+	mov edx, offset prompt_2
+	call WriteString
+	call CrLf
+	call ReadInt; in eax
+	call WriteDec
+	call CrLf
+	mov num_2, eax
+
+		;compare numbers
+	cmp num_1, eax
+	jle valError
+
+	;sum of numbers
+
+	add eax, ebx
+	mov edx, offset sum_string
+	call WriteString
+	call WriteDec
+	call CrLf
+
+	;difference of numbers
+	;What if second is smaller than first?
+	mov eax, num_2
+	sub eax, num_1
+	mov edx, offset difference_string
+	call WriteString
+	call WriteInt
+	call CrLf
+
+	;product of numbers
+	mov eax, num_1
+	mul num_2
+	mov edx, offset product_string
+	call WriteString
+	call WriteInt
+	call CrLf
+
+	;Quotient of numbers
+	mov eax, num_1
+	sub edx, edx
+	div num_2
+	mov remainder,edx
+	mov edx, offset quotient_string
+	call WriteString
+	call WriteDec
+	call crlf
+
+	;Remainder
+	mov eax, remainder
+	mov edx, offset remainder_string
+	call WriteString
+	call WriteInt
+	call crlf
+
+	;good bye
+
+	mov edx, offset bye
+	call WriteString
+	call crlf
+	
+	;repeat program?
+	mov edx, offset quit_string
+	call WriteString
+	call ReadInt
+	call crlf
+	cmp yes, eax
+	jne repeater
+	jmp whileLoop
+
+	valError:
+		mov edx, offset val_error
+		call WriteString
+		call crlf
+		exit
+
+repeater:
+	exit
 
 exit
 main ENDP
