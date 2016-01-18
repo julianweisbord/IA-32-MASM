@@ -58,7 +58,7 @@ whileLoop:
 	call WriteString
 	call CrLf
 	call ReadInt
-	call WriteDec
+	;call WriteDec
 	call CrLf
 	mov ebx, eax ;can't have 2 numbers in eax
 	mov num_1, ebx; store in num_1
@@ -67,7 +67,7 @@ whileLoop:
 	call WriteString
 	call CrLf
 	call ReadInt; in eax
-	call WriteDec
+	;call WriteDec
 	call CrLf
 	mov num_2, eax
 
@@ -85,8 +85,8 @@ whileLoop:
 
 	;difference of numbers
 	;What if second is smaller than first?
-	mov eax, num_2
-	sub eax, num_1
+	mov eax, num_1
+	sub eax, num_2
 	mov edx, offset difference_string
 	call WriteString
 	call WriteInt
@@ -116,12 +116,6 @@ whileLoop:
 	call WriteString
 	call WriteInt
 	call crlf
-
-	;good bye
-
-	mov edx, offset bye
-	call WriteString
-	call crlf
 	
 	;repeat program?
 	mov edx, offset quit_string
@@ -139,6 +133,11 @@ whileLoop:
 		exit
 
 repeater:
+	;good bye
+	mov edx, offset bye
+	call WriteString
+	call crlf
+
 	exit
 
 exit
