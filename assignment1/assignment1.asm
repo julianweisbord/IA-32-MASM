@@ -1,7 +1,11 @@
 TITLE assignment 1     (assignment1.asm)
 
-; Author: Julian Weisbord
-; Course / Project ID  CS271               Date:01/08/16
+; Author: Julian Weisbord 
+; Onid: weisborj@oregonstate.edu
+; Course / Project ID  CS271-001    
+; Assignment #1          
+; Date:01/08/16
+; Due Date: 01/17/16
 ; Description:  Displays name and program title. Prompts user for 2 numbers then
 ; calculates the sum, difference, product, (integer) quotient and remainder of 
 ; the numbers. Lastly, this program prints a terminating message.
@@ -47,6 +51,10 @@ call CrLf
 mov edx, offset ecDescription
 call WriteString
 call crlf
+call crlf
+
+mov eax,1000
+writeInt
 call crlf
 
 whileLoop:
