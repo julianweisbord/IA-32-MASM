@@ -19,13 +19,17 @@ greeting BYTE ", How are you? ",0
 userName BYTE 33 dup(0)
 num_prompt BYTE "How many numbers should we display(1-46): ", 0
 errorPrompt BYTE "Error! ", 0
-goodbye BYTE "Goodbye, "
+goodbye BYTE " Goodbye, "
+space BYTE " ", 0
 
-numNum DWORd ?
+fib_num DWORD ?
 one DWORD 1
 fourtySix DWORD 46
-i DWORD 0
 j DWORD 5
+i DWORD 1
+new_num DWORD ?
+prev_num DWORD 1
+prev_num2 DWORD 1
 
 .code
 main PROC
@@ -57,25 +61,50 @@ whileLoop:
 	mov edx, offset num_prompt
 	call writeString
 	call readint
+	mov fib_num, eax
 	cmp eax, one
 	jl throw_error
 	cmp eax, fourtySix
 	jg throw_error
-	mov ecx, j; for counted loop
+
+	
 	;Display fibonacci numbers
 	whileFib:
+		mov ecx, j; for counted loop
 		forLoop:
 			
+			;Fibonacci calculations
+			mov eax,prev_num
+			add eax, prev_num2; new_num = prev_num + prev_num2
+			mov new_num, eax
+			call writeDec; print fibonacci number here!
+			mov edx, offset space
+			call writestring
+
+			add eax, prev_num; prev_num1 = new_num + prev_num1
+			mov prev_num, eax
+			mov eax, prev_num2
+			add eax, new_num
+			mov prev_num2, eax
+			
+			;increment loops
+			mov eax, i
+			cmp eax, fib_num
+			jge farewell
+			add eax, 1
+			mov i, eax
 			loop forLoop
+			call crlf
+			jmp whileFib; once forLoop is done, jump to while
 
-
-;farewell
-mov edx, offset goodbye
-call writestring
-mov edx, offset userName
-call writestring
-call crlf
-exit
+farewell:
+	call crlf
+	mov edx, offset goodbye
+	call writestring
+	mov edx, offset userName
+	call writestring
+	call crlf
+	exit
 
 throw_error:
 	mov edx, offset errorPrompt
