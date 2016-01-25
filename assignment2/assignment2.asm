@@ -26,13 +26,15 @@ fib_num DWORD ?
 one BYTE "1",0
 two DWORD "2",0
 fourtySix DWORD 46
-j DWORD 5
+j DWORD 3 ;because we aren't counting the first 2 numbers
 i DWORD 1
 new_num DWORD ?
 prev_num DWORD 1
 prev_num2 DWORD 1
 oneNum DWORD 1
 twoNum DWORD 2
+zero DWORD 0
+five DWORD 5
 
 .code
 main PROC
@@ -69,13 +71,21 @@ whileLoop:
 	jl throw_error
 	cmp eax, fourtySix
 	jg throw_error
-	cmp eax, oneNum; check for 1 or 2 case
+	cmp eax, oneNum; check for 1 case
 	je onecase
-	cmp eax, twoNum
-	je twocase
+	cmp eax, oneNum
+	jne twocase
+	
 	
 	;Display fibonacci numbers
+	
+
 	whileFib:
+		;if fib_num == 0 jmp to farewell
+		mov eax, fib_num
+		cmp eax, zero
+		je farewell
+
 		mov ecx, j; for counted loop
 		forLoop:
 			
@@ -91,12 +101,6 @@ whileLoop:
 			mov prev_num2, eax ;prev_num2 = prev_num
 			mov eax, new_num
 			mov prev_num, eax; prev_num = new_num
-
-			;add eax, prev_num; prev_num = new_num + prev_num
-			;mov prev_num, eax
-			;mov eax, prev_num2
-			;add eax, new_num
-			;mov prev_num2, eax
 			
 			;increment loops
 			mov eax, i
@@ -104,6 +108,9 @@ whileLoop:
 			jge farewell
 			add eax, 1
 			mov i, eax
+
+			mov eax, five ;make for loop new line every 5 numbers
+			mov j, eax
 			loop forLoop
 			call crlf
 			jmp whileFib; once forLoop is done, jump to while
@@ -112,6 +119,8 @@ onecase:
 	mov edx, offset one
 	call writestring
 	call crlf
+	mov eax, fib_num
+	sub eax, 1
 	jmp farewell
 
 twocase:
@@ -120,9 +129,15 @@ twocase:
 	mov edx, offset space
 	call writestring
 
-	mov edx, offset two
+	mov edx, offset one
 	call writestring
-	call crlf
+	mov edx, offset space
+	call writestring
+
+	mov eax, fib_num
+	sub eax, 2
+	mov fib_num, eax
+	jmp whileFib
 
 farewell:
 	call crlf
