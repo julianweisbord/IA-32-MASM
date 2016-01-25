@@ -81,11 +81,16 @@ whileLoop:
 			mov edx, offset space
 			call writestring
 
-			add eax, prev_num; prev_num1 = new_num + prev_num1
-			mov prev_num, eax
-			mov eax, prev_num2
-			add eax, new_num
-			mov prev_num2, eax
+			mov eax, prev_num
+			mov prev_num2, eax ;prev_num2 = prev_num
+			mov eax, new_num
+			mov prev_num, eax; prev_num = new_num
+
+			;add eax, prev_num; prev_num = new_num + prev_num
+			;mov prev_num, eax
+			;mov eax, prev_num2
+			;add eax, new_num
+			;mov prev_num2, eax
 			
 			;increment loops
 			mov eax, i
