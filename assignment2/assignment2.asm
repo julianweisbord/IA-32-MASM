@@ -23,13 +23,16 @@ goodbye BYTE " Goodbye, "
 space BYTE " ", 0
 
 fib_num DWORD ?
-one DWORD 1
+one BYTE "1",0
+two DWORD "2",0
 fourtySix DWORD 46
 j DWORD 5
 i DWORD 1
 new_num DWORD ?
 prev_num DWORD 1
 prev_num2 DWORD 1
+oneNum DWORD 1
+twoNum DWORD 2
 
 .code
 main PROC
@@ -62,11 +65,14 @@ whileLoop:
 	call writeString
 	call readint
 	mov fib_num, eax
-	cmp eax, one
+	cmp eax, oneNum
 	jl throw_error
 	cmp eax, fourtySix
 	jg throw_error
-
+	cmp eax, oneNum; check for 1 or 2 case
+	je onecase
+	cmp eax, twoNum
+	je twocase
 	
 	;Display fibonacci numbers
 	whileFib:
@@ -101,6 +107,22 @@ whileLoop:
 			loop forLoop
 			call crlf
 			jmp whileFib; once forLoop is done, jump to while
+
+onecase:
+	mov edx, offset one
+	call writestring
+	call crlf
+	jmp farewell
+
+twocase:
+	mov edx, offset one
+	call writestring
+	mov edx, offset space
+	call writestring
+
+	mov edx, offset two
+	call writestring
+	call crlf
 
 farewell:
 	call crlf
