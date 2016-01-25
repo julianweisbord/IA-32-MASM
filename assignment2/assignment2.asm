@@ -1,4 +1,4 @@
-TITLE assignment 2     (assignment1.asm)
+TITLE assignment 2     (assignment2.asm)
 
 ; Author: Julian Weisbord 
 ; Onid: weisborj@oregonstate.edu
@@ -6,26 +6,28 @@ TITLE assignment 2     (assignment1.asm)
 ; Assignment #2          
 ; Date:01/22/16
 ; Due Date: 01/24/16
-; Description:  
+; Description: This program prints out the fibonacci sequence specified by the user from 1 to 46 
 
 INCLUDE Irvine32.inc
+
+fourtySix = 46
 
 .data
 
 my_name BYTE "by Julian Weisbord.", 0
-assignment2 BYTE "Assignment 2 ",0
+assignment2 BYTE "Assignment 2, fibonacci numbers ",0
 userNamePrompt BYTE "What is your name: ",0
 greeting BYTE ", How are you? ",0
 userName BYTE 33 dup(0)
 num_prompt BYTE "How many numbers should we display(1-46): ", 0
 errorPrompt BYTE "Error! ", 0
-goodbye BYTE " Goodbye, "
-space BYTE " ", 0
+goodbye BYTE " Goodbye, ",0
+space BYTE "     ", 0
 
 fib_num DWORD ?
 one BYTE "1",0
 two DWORD "2",0
-fourtySix DWORD 46
+
 j DWORD 3 ;because we aren't counting the first 2 numbers
 i DWORD 1
 new_num DWORD ?
