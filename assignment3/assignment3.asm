@@ -28,10 +28,11 @@ averageOutput BYTE "The average is: ", 0
 sum BYTE "The sum is: ", 0
 counter_string BYTE "Number of numbers entered: ", 0
 noNumEntered BYTE "You did not enter any negative numbers. ",0
+sumString BYTE "The sum is: ",0
 
 temp_num DWORD ?
 total DWORD ?
-counter DWORD ?
+counter DWORD 0
 average DWORD ?
 
 .code
@@ -69,40 +70,63 @@ main proc
     cmp eax, lower_limit
     jl outRange
 
-    add total, eax; add new number to running total
-	mov eax, one
-    add counter, eax; increment number of numbers entered
+	mov eax, total
+    add eax, temp_num	; add new number to running total
+	mov total, eax
+
+    ; increment number of numbers entered
+	inc counter
+	mov eax,counter
+	call writeInt
+	call crlf
 	mov eax, zero
     cmp temp_num, eax
     jl whileLoop
 
 	
-
+	mov eax, temp_num
     sub total, eax
-    sub counter, one
+	;mov total, eax
+
+	;mov eax, one
+    ;sub counter, eax
+	;mov counter, eax
+	dec counter
+
+	mov edx, offset counter_string
+	mov eax, counter
+	call writeString 
+	call writeInt
+	call crlf
 
 	mov eax, zero
 	cmp counter, eax
 	je noNum
 
     ;average
-	mov edx, offset counter_string
-	mov eax, counter
-	call writeString
-	call writeDec
-	call crlf
+
 
     mov eax, total
-	sub edx, edx ;set edx to zero
-    div counter; might not divide into eax
+	mov ebx, counter
+	cdq
+    idiv ebx
+		;idiv counter; might not divide into eax
     mov edx, offset averageOutput
     call writeString
     call crlf
 	
     call writeInt
 	call crlf
-	mov eax, edx
-	call writeDec
+
+
+	;sum
+
+	mov edx, offset sumString
+	call writeString
+	mov eax, total
+	call writeInt
+	call crlf
+
     exit
 
 
