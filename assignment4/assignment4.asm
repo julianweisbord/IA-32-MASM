@@ -28,6 +28,11 @@ n DWORD 0
 counter DWORD 0
 zero DWORD 0
 one DWORD 1
+two DWORD 2
+three DWORD 3
+five DWORD 5
+seven DWORD 7
+ten 10
 
 
 
@@ -96,11 +101,37 @@ showComposites PROC
 
 isComposite PROC
 	forLoop:		; check to see if numbers are composite and decrements to 0
+	mov eax, n
 
-	loop forLoop
+	cmp eax, two ; number 2 
+	je loopIt
+	div two
+	call writeInt ;double check print
+	cmp zero, edx
+	je printInc
 
+	mov eax, n
+	cmp eax, 3		;number 3
+	je loopIt
+	div three
+	cmp zero, edx
+	je printInc
+
+	loopIt:
+		loop forLoop
+
+	printInc:
+		inc counter
+		mov eax, n
+		call writeInt
+		mov eax, counter
+		cmp eax, ten
+		je new_line
+		jmp loopIt
 	
-		
+		new_line:	; reset counter
+			call crlf
+			mov counter, zero	
 
 	ret
 	isComposite ENDP
