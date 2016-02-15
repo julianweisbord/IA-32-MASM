@@ -3,10 +3,10 @@ TITLE assignment 4     (assignment4.asm)
 ; Author: Julian Weisbord
 ; Onid: weisborj@oregonstate.edu
 ; Course / Project ID  CS271-001
-; Assignment #3
-; Date:02/05/16
-; Due Date: 02/07/16
-; Description: This program prints the sum and average of negative numbers between -100, -1
+; Assignment #4
+; Date:02/14/16
+; Due Date: 02/14/16
+; Description: This program computes n composite numbers
 
 INCLUDE Irvine32.inc
 
@@ -20,27 +20,36 @@ my_name BYTE " My name is Julian Weisbord.", 0
 assignment BYTE "This is Assignment 4, composite numbers", 0
 ;your_name BYTE 33 dup(0)
 greeting BYTE ", how are you?", 0
-enterNum BYTE "Enter a number [0,400]: ", 0
+enterNum BYTE "Enter a number [1,400]: ", 0
 goodbye BYTE "Good day human!",0
 err BYTE "Error out of range!", 0
 spaces BYTE "   ", 0
+spaces4 BYTE "    ", 0
+spaces5 BYTE "     ",0
 counter_string BYTE "This is counter: ",0
+extra BYTE " EXTRA CREDIT: Align everything in ouput columns",0
 
 n DWORD 0
 counter DWORD 0
 zero DWORD 0
 one DWORD 1
 two DWORD 2
-three DWORD 3
-five DWORD 5
-seven DWORD 7
 ten DWORD 10
+odd_num DWORD 1
+current_num DWORD 3
+twentyone DWORD 21
+hundred DWORD 100
+
+
 
 
 
 .code
 
 introduction PROC
+	mov edx, offset extra
+	call writeString
+	call crlf 
 	mov edx, offset assignment
 	call writeString
 	call crlf
@@ -73,7 +82,7 @@ validate PROC
 	cmp n, upper_limit
 	jg error
 	cmp n, lower_limit
-	jl error
+	jle error
 
 	ret
 	error:
@@ -85,84 +94,109 @@ validate PROC
 	validate ENDP
 
 showComposites PROC
-	;mov eax, n
-	;cmp eax, zero
-	;je skipWrite
-	;cmp eax, one
-	;je skipWrite
 
-	;inc counter
-	;call writeInt
-	;if counter is 10 then newline
-
-	skipWrite:		; if num is zero or 1 don't write to screen
 	call isComposite
 
 	ret
 	showComposites ENDP
 
 isComposite PROC
-	mov eax, n
+	
 	mov ecx, n
+			
+
 	forLoop:		; check to see if numbers are composite and decrements to 0	
-		cmp eax, two ; number 2 
-		je loopIt
+		
+			;The even case
+		inc current_num
+		mov eax, current_num
 		cdq
 		mov ebx, two
 		div ebx
-		;call writeDec ;double check print
-		cmp zero, edx
+		cmp edx, zero
 		je printInc
 
-		mov eax, n
-		cmp eax, three		;number 3
-		je loopIt
-		cdq
-		mov ebx, three
-		div ebx
-		cmp zero, edx
-		je printInc
+		oddLoop:
+			
 
-		mov eax, n
-		cmp eax, five		;number 5
-		je loopIt
-		cdq
-		mov ebx, five
-		div ebx
-		cmp zero, edx
-		je printInc
+			inc odd_num
+			inc odd_num
+						; if odd_num gets to 19 case
+			mov eax, odd_num
+			cmp eax, twentyone
+			jge forLoop
 
-		mov eax, n
-		cmp eax, seven		;number 7
-		je loopIt
-		cdq
-		mov ebx, seven
-		div ebx
-		;div seven
-		cmp zero, edx
-		je printInc
+			mov eax, odd_num
 
-		loopIt:
-			loop forLoop
+			cmp current_num, eax
+			je forLoop
+
+			
+		
+
+				;If current_num is divisible by odd_num
+			mov eax, current_num
+			mov ebx, odd_num
+			cdq
+			 div ebx
+			cmp edx, zero
+			je printInc
+
+				;We cant jump to forLoop (too many bytes to jump) so must put this part way through code
+			jmp below
+			forLoopMid:
+			jmp forLoop
+			
+			below:
+
+			jmp oddLoop
+
+			
 
 		printInc:
-			inc counter
-			mov eax, n
-			call writeDec
 
-			mov edx, offset spaces
-			call writeString
+			mov eax, one
+			mov odd_num, eax
+
+			inc counter
+			mov eax, current_num
+			call writeInt
+			mov eax, current_num
+			cmp eax, ten
+			jl spacesFive
+			cmp eax, hundred
+			jl spacesFour
+			cmp eax, hundred
+			jge spacesThree
+
+			spacesThree:
+				mov edx, offset spaces
+				call writeString
+				jmp cont
+
+			spacesFour:
+				mov edx, offset spaces4
+				call writeString
+				jmp cont
+			spacesFive:
+				mov edx, offset spaces5
+				call writeString
+			
+			cont:
 			mov eax, counter
 			cmp eax, ten
 			je new_line
-			jmp loopIt
+			loop forLoopMid
+			ret
 	
 			new_line:	; reset counter
 				call crlf
 				mov eax, zero
 				mov counter, eax	
+				loop forLoopMid
+				ret
 
-	ret
+	
 	isComposite ENDP
 
 
@@ -171,7 +205,7 @@ isComposite PROC
 main proc
 	call introduction
 	call get_data
-	call showComposites
+ 	call showComposites
 	call farewell
 	
  
