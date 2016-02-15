@@ -20,9 +20,11 @@ my_name BYTE " My name is Julian Weisbord.", 0
 assignment BYTE "This is Assignment 4, composite numbers", 0
 ;your_name BYTE 33 dup(0)
 greeting BYTE ", how are you?", 0
-enterNum BYTE "Enter a number [0,400] ", 0
+enterNum BYTE "Enter a number [0,400]: ", 0
 goodbye BYTE "Good day human!",0
 err BYTE "Error out of range!", 0
+spaces BYTE "   ", 0
+counter_string BYTE "This is counter: ",0
 
 n DWORD 0
 counter DWORD 0
@@ -32,7 +34,7 @@ two DWORD 2
 three DWORD 3
 five DWORD 5
 seven DWORD 7
-ten 10
+ten DWORD 10
 
 
 
@@ -83,14 +85,14 @@ validate PROC
 	validate ENDP
 
 showComposites PROC
-	mov eax, n
-	cmp eax, zero
-	je skipWrite
-	cmp eax, one
-	je skipWrite
+	;mov eax, n
+	;cmp eax, zero
+	;je skipWrite
+	;cmp eax, one
+	;je skipWrite
 
-	inc counter
-	call writeInt
+	;inc counter
+	;call writeInt
 	;if counter is 10 then newline
 
 	skipWrite:		; if num is zero or 1 don't write to screen
@@ -100,38 +102,65 @@ showComposites PROC
 	showComposites ENDP
 
 isComposite PROC
-	forLoop:		; check to see if numbers are composite and decrements to 0
 	mov eax, n
+	mov ecx, n
+	forLoop:		; check to see if numbers are composite and decrements to 0	
+		cmp eax, two ; number 2 
+		je loopIt
+		cdq
+		mov ebx, two
+		div ebx
+		;call writeDec ;double check print
+		cmp zero, edx
+		je printInc
 
-	cmp eax, two ; number 2 
-	je loopIt
-	div two
-	call writeInt ;double check print
-	cmp zero, edx
-	je printInc
-
-	mov eax, n
-	cmp eax, 3		;number 3
-	je loopIt
-	div three
-	cmp zero, edx
-	je printInc
-
-	loopIt:
-		loop forLoop
-
-	printInc:
-		inc counter
 		mov eax, n
-		call writeInt
-		mov eax, counter
-		cmp eax, ten
-		je new_line
-		jmp loopIt
+		cmp eax, three		;number 3
+		je loopIt
+		cdq
+		mov ebx, three
+		div ebx
+		cmp zero, edx
+		je printInc
+
+		mov eax, n
+		cmp eax, five		;number 5
+		je loopIt
+		cdq
+		mov ebx, five
+		div ebx
+		cmp zero, edx
+		je printInc
+
+		mov eax, n
+		cmp eax, seven		;number 7
+		je loopIt
+		cdq
+		mov ebx, seven
+		div ebx
+		;div seven
+		cmp zero, edx
+		je printInc
+
+		loopIt:
+			loop forLoop
+
+		printInc:
+			inc counter
+			mov eax, n
+			call writeDec
+
+			mov edx, offset spaces
+			call writeString
+			mov eax, counter
+			cmp eax, ten
+			je new_line
+			jmp loopIt
 	
-		new_line:	; reset counter
-			call crlf
-			mov counter, zero	
+			new_line:	; reset counter
+				call crlf
+				mov eax, zero
+				mov counter, eax	
 
 	ret
 	isComposite ENDP
@@ -142,9 +171,8 @@ isComposite PROC
 main proc
 	call introduction
 	call get_data
-	call farewell
 	call showComposites
-	
+	call farewell
 	
  
 
