@@ -21,6 +21,8 @@ hi = 999
 ;userNamePrompt BYTE "What is your name?", 0
 my_name BYTE " My name is Julian Weisbord.", 0
 assignment BYTE "This is Assignment 5, random numbers", 0
+errorString BYTE "Error restart!",0
+input BYTE "Enter a number in range [10, 200]: ",0
 
 
 
@@ -38,12 +40,51 @@ introduction PROC
 	ret
 	introduction ENDP
 
+getData PROC
+	mov edx, offset input
+	call writeString
+	call readInt
+	cmp eax, min
+	jl errorLabel
+	cmp eax, max
+	jg errorLabel
+	call crlf
+
+	ret
+
+	errorLabel:
+		mov edx, offset errorString 
+		call writeString
+		call crlf
+		exit
+
+	getData ENDP
+
+fill_array PROC
+	ret
+	fill_array ENDP
+
+sort_list PROC
+	ret
+	sort_list ENDP
+
+display_median PROC
+	
+	ret
+	display_median ENDP
+
+display_list PROC
+
+	ret
+	display_list ENDP
+
 
 main proc
 	call introduction
-	
- 
-
+	call getData
 exit
+	
+
+
 main endp
 end main
