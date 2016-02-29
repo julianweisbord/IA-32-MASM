@@ -18,12 +18,14 @@ hi = 999
 
 .data
 
-;userNamePrompt BYTE "What is your name?", 0
+
 my_name BYTE " My name is Julian Weisbord.", 0
 assignment BYTE "This is Assignment 5, random numbers", 0
 errorString BYTE "Error restart!",0
 input BYTE "Enter a number in range [10, 200]: ",0
-
+user_input DWORD 0
+my_array DWORD 200 DUP(0)
+array_count DWORD ?
 
 
 
@@ -36,21 +38,31 @@ introduction PROC
 	mov edx, offset my_name
 	call writeString
 	call crlf
+	
+	mov edx, offset input
+	call writeString
 
 	ret
 	introduction ENDP
 
 getData PROC
-	mov edx, offset input
-	call writeString
+
+	push ebp
+	mov ebp, esp
+	mov ebx, [ebp +8] ; get user input from stack
+	mov eax, [ebx]
+
+	
 	call readInt
+	call writeInt
 	cmp eax, min
 	jl errorLabel
 	cmp eax, max
 	jg errorLabel
 	call crlf
 
-	ret
+	pop ebp
+	ret 4
 
 	errorLabel:
 		mov edx, offset errorString 
@@ -81,7 +93,10 @@ display_list PROC
 
 main proc
 	call introduction
+	
+	push offset user_input
 	call getData
+	call writeInt
 exit
 	
 
