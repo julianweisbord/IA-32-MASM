@@ -29,7 +29,11 @@ sorted BYTE "The sorted list is: ", 0
 space BYTE " ",0
 user_input DWORD 0
 my_array DWORD 200 DUP(0)
-;array_count DWORD LENGTHOF my_array
+x DWORD 0
+y DWORD 0
+temp DWORD 0
+temp1 DWORD 0
+
 
 
 
@@ -107,10 +111,46 @@ fill_array PROC
 	
 
 	pop ebp
-	ret 12
+	ret 
 	fill_array ENDP
 
 sort_list PROC
+	push ebp
+	mov ebp, esp
+
+	mov edi, [ebp +12]; this is array unsorted
+	mov ebx, [ebp+8]; user_input
+
+	whileX:
+
+			whileY:
+
+			;logic
+			mov eax,[edi+x]
+			cmp eax, [edi+x+1]
+
+				;conditions
+			mov temp, ebx
+			sub ebx, x
+			dec ebx
+			cmp y, ebx
+			
+			mov ebx, temp ; so ebx/ userinput doesn't change
+			jl whileY
+			inc y
+
+
+	mov temp1, ebx
+	dec temp1
+	mov eax, temp1
+	cmp x, eax
+	inc x
+	jl WhileX
+
+
+
+
+	pop ebp
 	ret
 	sort_list ENDP
 
@@ -118,6 +158,10 @@ display_median PROC
 	
 	ret
 	display_median ENDP
+
+
+
+
 
 display_list PROC
 
@@ -159,7 +203,7 @@ display_list PROC
 		jmp continueLabel
 	finish:
 	pop ebp
-	ret
+	ret 12
 
 	display_list ENDP
 
@@ -183,7 +227,14 @@ main proc
 	push offset unsorted
 	push offset my_array
 	push user_input; hopefully this is the same
+
 	call display_list
+
+	push offset my_array
+	push user_input
+
+	call sort_list
+
 
 exit
 	
