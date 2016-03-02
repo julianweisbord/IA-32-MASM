@@ -57,7 +57,7 @@ main proc
 	mov edx, offset your_name
 	mov ecx, 32; not 33 so there is a 0 at the end of the users name
 	call readString
-	call crlf
+	call crlfsd
 	call writestring
 	mov edx, offset greeting
 	call writestring
